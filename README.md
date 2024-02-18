@@ -22,12 +22,18 @@
 ## Структура репозитория
 
 Файл с координатами городов Австралии, которые аналитики собрали в одну таблицу — geo.csv
-<https://code.s3.yandex.net/data-analyst/data_engeneer/geo.csv> загружается в HDFS 
+Изначально файл расположен по адресу <https://code.s3.yandex.net/data-analyst/data_engeneer/geo.csv> 
+мы его загрузили локально, а потом скопировали в HDFS 
+```
+!hdfs dfs -copyFromLocal /lessons/geo.csv /user/tolique7/geo.csv
+```
 
 
 Внутри `src` расположены две папки:
-- </src/dags>
-- </src/sql>
+```
+/src/dags
+/src/sql
+```
 
 
 ## Витрины данных
