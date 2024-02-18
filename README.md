@@ -28,8 +28,10 @@
 ```!hdfs dfs -copyFromLocal /lessons/geo.csv /user/tolique7/geo.csv```
 
 Внутри `src` расположены две папки:
-```/src/dags```
-```/src/sql```
+
+`/src/dags`
+
+`/src/sql`
 
 
 ## Витрины данных
