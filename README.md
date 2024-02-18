@@ -25,13 +25,16 @@
 Изначально файл расположен по адресу <https://code.s3.yandex.net/data-analyst/data_engeneer/geo.csv>
 
 Он был загружен локально, а потом скопирован в HDFS: 
-```!hdfs dfs -copyFromLocal /lessons/geo.csv /user/tolique7/geo.csv```
+```
+!hdfs dfs -copyFromLocal /lessons/geo.csv /user/tolique7/geo.csv
+```
 
 Внутри `src` расположены две папки:
+```
+/src/dags```
 
-`/src/dags`
-
-`/src/sql`
+```
+/src/sql```
 
 
 ## Витрины данных
