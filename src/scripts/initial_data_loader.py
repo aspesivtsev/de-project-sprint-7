@@ -8,6 +8,7 @@ os.environ['SPARK_HOME'] ='/usr/lib/spark'
 os.environ['PYTHONPATH'] ='/usr/local/lib/python3.8'
 
 #from hadoop_settings import *
+
 #import hadoop_settings as hs
 #hs.init()
 
@@ -16,8 +17,8 @@ from pyspark.sql import SQLContext
 import pyspark.sql.functions as F
 
 def main():
-        input_path=sys.argv[1]
-        output_path=sys.argv[2]
+        input_path=sys.argv[1] # /user/master/data/geo/events/
+        output_path=sys.argv[2] # /user/tolique7/data/geo/events/
 
         conf = SparkConf().setAppName(f"Initial Data Loading")
         sc = SparkContext(conf=conf)
@@ -39,7 +40,6 @@ if __name__ == "__main__":
         main()
         
 #! /usr/lib/spark/bin/spark-submit --master yarn --deploy-mode cluster /lessons/initial_data_loader.py /user/master/data/geo/events/ /user/tolique7/data/geo/events/
-
 
 # hdfs dfs -ls /user/tolique7/data/geo/events/
 #! hdfs dfs -rm -r /user/tolique7/data/geo/events/*   #remove all files in a hdfs folder

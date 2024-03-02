@@ -1,45 +1,44 @@
 import os
 os.environ['HADOOP_CONF_DIR'] = '/etc/hadoop/conf'
 os.environ['YARN_CONF_DIR'] = '/etc/hadoop/conf'
-os.environ["JAVA_HOME"] = "/usr"
-os.environ["SPARK_HOME"] = "/usr/lib/spark"
-os.environ["PYTHONPATH"] = "/usr/local/lib/python3.8"
 
 import findspark
 findspark.init()
 findspark.find()
 
+import math
+import datetime
 import pyspark
 import sys
-import datetime
-import math
 
 from pyspark.sql import SparkSession, DataFrame
 from pyspark.context import SparkContext
 from pyspark.sql.window import Window
 import pyspark.sql.functions as F
 from pyspark.sql.types import *
-#from pyspark.sql.functions import *
-#from pyspark.sql.functions import udf
 
 
 # spark settings
 spark = SparkSession.builder \
-                    .master("yarn") \
-                    .config("spark.driver.cores", "2") \
-                    .config("spark.driver.memory", "16g") \
-                    .config("spark.dynamicAllocation.enabled", "true") \
-                    .config("spark.dynamicAllocation.executorIdleTimeout", "60s") \
-                    .getOrCreate()
+    .appName("Users Mart") \
+    .master("yarn") \
+    .config("spark.executor.memory", "2g") \
+    .config("spark.executor.cores", "2") \
+    .config("spark.driver.cores", "2") \
+    .config("spark.dynamicAllocation.enabled", "true") \
+    .config("spark.dynamicAllocation.executorIdleTimeout", "60s") \
+    .config("spark.ui.port", "4051") \
+    .getOrCreate()
 
-target_date = sys.argv[1] # '2022-05-31'
+date = sys.argv[1] # '2022-05-31'
 depth_days = sys.argv[2] # 35
 events_path = sys.argv[3] # "/user/tolique7/data/geo/events/" 
 geo_cities_path = sys.argv[4] # "/user/tolique7/geo.csv"
 output_path = sys.argv[5] # "/user/tolique7/data/analytics/"
 
 # sprk-submit for testing
-# /usr/lib/spark/bin/spark-submit --master yarn --deploy-mode cluster /lessons/users_mart.py 2022-05-31 10 /user/tolique7/data/geo/events/ /user/tolique7/geo.csv /user/tolique7/data/analytics/
+# /usr/lib/spark/bin/spark-submit --master yarn --deploy-mode cluster /lessons/users_mart.py 2022-05-31 10 hdfs://rc1a-dataproc-m-dg5lgqqm7jju58f9.mdb.yandexcloud.net:8020/user/tolique7/data/geo/events/ hdfs://rc1a-dataproc-m-dg5lgqqm7jju58f9.mdb.yandexcloud.net:8020/user/tolique7/geo.csv hdfs://rc1a-dataproc-m-dg5lgqqm7jju58f9.mdb.yandexcloud.net:8020/user/tolique7/data/analytics/
+
 
 # reading the geo.csv data to get info about Australian cities
 geo_cities_au = spark.read.csv(geo_cities_path, sep = ";", header = True) \
@@ -57,13 +56,15 @@ def calculate_the_distance(lat_1, lat_2, lng_1, lng_2):
     result = 2 * 6371 * math.asin(math.sqrt(math.pow(math.sin((lat_2 - lat_1) / 2), 2) + math.cos(lat_1) * math.cos(lat_2) * math.pow(math.sin((lng_2 - lng_1) / 2),2)))
     return result
 
+
 # defining a user defined function for calculating the distance 
-udf_calculate_the_distance=F.udf(calculate_the_distance)
+udf_calculate_the_distance = F.udf(calculate_the_distance)
+
 
 # list of paths
-def input_paths(target_date, depth_days:int, events_path:str):
-    dt = datetime.datetime.strptime(target_date, "%Y-%m-%d")
-    result = [f"{events_path}/target_date={(dt-datetime.timedelta(days=day)).strftime('%Y-%m-%d')}" for day in range(int(depth_days))]
+def input_paths(date, depth_days, events_path):
+    d_t = datetime.datetime.strptime(date, "%Y-%m-%d")
+    result = [f"{events_path}/date={(d_t-datetime.timedelta(days=day)).strftime('%Y-%m-%d')}" for day in range(int(depth_days))]
     return result
 
 
@@ -74,7 +75,7 @@ def main():
         .getOrCreate()
     )
 
-    paths_for_processing = input_paths(target_date, depth_days, events_path)
+    paths_for_processing = input_paths(date, depth_days, events_path)
 
     all_events = spark.read.option("basePath", events_path).parquet(*paths_for_processing)
 
@@ -82,7 +83,7 @@ def main():
     all_event_messages = (
         all_events.where(F.col("event_type") == "message")
         .withColumn(
-            "target_date",
+            "date",
             F.date_trunc(
                 "day",
                 F.coalesce(F.col("event.datetime"), F.col("event.message_ts")),
@@ -91,16 +92,16 @@ def main():
         .selectExpr(
             "event.message_from as user_id",
             "event.message_id",
-            "target_date",
+            "date",
             "event.datetime",
             "lat",
-            "lon"
+            "lon",
         )
     )
 
 
     # dataset with all messages, send date, city and a time zone
-    messages_cities = (
+    messages_and_cities = (
         all_event_messages.crossJoin(geo_cities_au)
         .withColumn(
             "distance",
@@ -115,7 +116,7 @@ def main():
             ),
         )
         .where("distance_rank == 1")
-        .select ("user_id", "message_id", "target_date", "datetime", "city", "timezone")
+        .select ("user_id", "message_id", "date", "datetime", "city", "timezone")
     )
     
 
@@ -141,23 +142,23 @@ def main():
             ),
         )
         .where("distance_rank == 1")
-        .select("user_id", F.col("city").alias("act_city"), "target_date", "timezone")
+        .select("user_id", F.col("city").alias("act_city"), "date", "timezone")
     ) 
 
 
     # temporary table with the list of different cities from which messages were sent (for every user separatelly) 
     cities_list_of_users = (
-        messages_cities.withColumn(
-            "max_date", F.max("target_date").over(Window().partitionBy("user_id"))
+        messages_and_cities.withColumn(
+            "max_date", F.max("date").over(Window().partitionBy("user_id"))
         )
         .withColumn(
             "city_lag",
             F.lead("city", 1, "empty").over(
-                Window().partitionBy("user_id").orderBy(F.col("target_date").desc())
+                Window().partitionBy("user_id").orderBy(F.col("date").desc())
             ),
         )
         .filter(F.col("city") != F.col("city_lag"))
-        .select("user_id", "message_id", "target_date", "datetime", "city", "timezone", "max_date", "city_lag") 
+        .select("user_id", "message_id", "date", "datetime", "city", "timezone", "max_date", "city_lag") 
     )
 
 
@@ -165,20 +166,20 @@ def main():
     home_city = (
         cities_list_of_users.withColumnRenamed("city", "home_city")
         .withColumn(
-            "target_date_lag",
+            "date_lag",
             F.coalesce(
-                F.lag("target_date").over(
-                    Window().partitionBy("user_id").orderBy(F.col("target_date").desc())
+                F.lag("date").over(
+                    Window().partitionBy("user_id").orderBy(F.col("date").desc())
                 ),
                 F.col("max_date"),
             ),
         )
-        .withColumn("date_diff", F.datediff(F.col("date_lag"), F.col("target_date")))
+        .withColumn("date_diff", F.datediff(F.col("date_lag"), F.col("date")))
         .where(F.col("date_diff") > 27)
         .withColumn(
             "rank",
             F.row_number().over(
-                Window.partitionBy("user_id").orderBy(F.col("target_date").desc())
+                Window.partitionBy("user_id").orderBy(F.col("date").desc())
             ),
         )
         .where(F.col("rank") == 1)
@@ -195,12 +196,12 @@ def main():
 
     # calculating the local time
     local_time = current_city_by_last_message.withColumn(
-        "localtime", F.from_utc_timestamp(F.col("target_date"), F.col("timezone"))
+        "localtime", F.from_utc_timestamp(F.col("date"), F.col("timezone"))
     ).select("user_id", "localtime")
 
 
-    # binding all data to a final mart
-    final = (
+    # binding all the data to the final mart
+    final_mart = (
         current_city_by_last_message
         .join(home_city, "user_id", "left")
         .join(travel_list, "user_id", "left")
@@ -211,13 +212,13 @@ def main():
             "home_city",
             "travel_count",
             "travel_array",
-            "localtime"
+            "localtime",
         )
     )
 
     # writing the result to parquet
-    final.write.mode("overwrite").parquet(
-        f"{output_path}/mart/users/_{target_date}_{depth_days}"
+    final_mart.write.mode("overwrite").parquet(
+        f"{output_path}/mart/users/_{date}_{depth_days}"
     )
 
 

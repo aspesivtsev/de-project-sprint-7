@@ -1,0 +1,149 @@
+!/usr/lib/spark/bin/spark-submit --master yarn --deploy-mode cluster /lessons/users_mart.py 2022-05-31 10 /user/tolique7/data/geo/events/ /user/tolique7/geo.csv /user/tolique7/data/analytics/
+
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/usr/lib/spark/jars/slf4j-log4j12-1.7.30.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/usr/lib/hadoop/lib/slf4j-log4j12-1.7.25.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.slf4j.impl.Log4jLoggerFactory]
+2024-02-25 20:09:26,287 WARN util.Utils: Your hostname, fhmjf7pgoamojj4hn82q resolves to a loopback address: 127.0.1.1; using 172.16.0.29 instead (on interface eth0)
+2024-02-25 20:09:26,288 WARN util.Utils: Set SPARK_LOCAL_IP if you need to bind to another address
+2024-02-25 20:09:26,977 INFO client.RMProxy: Connecting to ResourceManager at rc1a-dataproc-m-dg5lgqqm7jju58f9.mdb.yandexcloud.net/172.16.0.14:8032
+2024-02-25 20:09:27,197 INFO client.AHSProxy: Connecting to Application History server at rc1a-dataproc-m-dg5lgqqm7jju58f9.mdb.yandexcloud.net/172.16.0.14:10200
+2024-02-25 20:09:27,277 INFO yarn.Client: Requesting a new application from cluster with 5 NodeManagers
+2024-02-25 20:09:27,729 INFO conf.Configuration: resource-types.xml not found
+2024-02-25 20:09:27,730 INFO resource.ResourceUtils: Unable to find 'resource-types.xml'.
+2024-02-25 20:09:27,747 INFO yarn.Client: Verifying our application has not requested more than the maximum memory capability of the cluster (37888 MB per container)
+2024-02-25 20:09:27,748 INFO yarn.Client: Will allocate AM container, with 1152 MB memory including 384 MB overhead
+2024-02-25 20:09:27,749 INFO yarn.Client: Setting up container launch context for our AM
+2024-02-25 20:09:27,752 INFO yarn.Client: Setting up the launch environment for our AM container
+2024-02-25 20:09:27,765 INFO yarn.Client: Preparing resources for our AM container
+2024-02-25 20:09:27,812 INFO yarn.Client: Uploading resource file:/lessons/users_mart.py -> hdfs://rc1a-dataproc-m-dg5lgqqm7jju58f9.mdb.yandexcloud.net/user/tolique7/.sparkStaging/application_1692104774102_33273/users_mart.py
+2024-02-25 20:09:28,004 INFO yarn.Client: Uploading resource file:/usr/lib/spark/python/lib/pyspark.zip -> hdfs://rc1a-dataproc-m-dg5lgqqm7jju58f9.mdb.yandexcloud.net/user/tolique7/.sparkStaging/application_1692104774102_33273/pyspark.zip
+2024-02-25 20:09:28,035 INFO yarn.Client: Uploading resource file:/usr/lib/spark/python/lib/py4j-0.10.9-src.zip -> hdfs://rc1a-dataproc-m-dg5lgqqm7jju58f9.mdb.yandexcloud.net/user/tolique7/.sparkStaging/application_1692104774102_33273/py4j-0.10.9-src.zip
+2024-02-25 20:09:28,317 INFO yarn.Client: Uploading resource file:/tmp/spark-22bf9729-8066-45fb-8386-1b0101e8d6d7/__spark_conf__3480158627434748695.zip -> hdfs://rc1a-dataproc-m-dg5lgqqm7jju58f9.mdb.yandexcloud.net/user/tolique7/.sparkStaging/application_1692104774102_33273/__spark_conf__.zip
+2024-02-25 20:09:28,382 INFO spark.SecurityManager: Changing view acls to: tolique7
+2024-02-25 20:09:28,383 INFO spark.SecurityManager: Changing modify acls to: tolique7
+2024-02-25 20:09:28,383 INFO spark.SecurityManager: Changing view acls groups to: 
+2024-02-25 20:09:28,384 INFO spark.SecurityManager: Changing modify acls groups to: 
+2024-02-25 20:09:28,384 INFO spark.SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users  with view permissions: Set(tolique7); groups with view permissions: Set(); users  with modify permissions: Set(tolique7); groups with modify permissions: Set()
+2024-02-25 20:09:28,450 INFO yarn.Client: Submitting application application_1692104774102_33273 to ResourceManager
+2024-02-25 20:09:28,488 INFO impl.YarnClientImpl: Submitted application application_1692104774102_33273
+2024-02-25 20:09:29,491 INFO yarn.Client: Application report for application_1692104774102_33273 (state: ACCEPTED)
+2024-02-25 20:09:29,494 INFO yarn.Client: 
+	 client token: N/A
+	 diagnostics: AM container is launched, waiting for AM container to Register with RM
+	 ApplicationMaster host: N/A
+	 ApplicationMaster RPC port: -1
+	 queue: root.tolique7
+	 start time: 1708891768465
+	 final status: UNDEFINED
+	 tracking URL: http://rc1a-dataproc-m-dg5lgqqm7jju58f9.mdb.yandexcloud.net:8088/proxy/application_1692104774102_33273/
+	 user: tolique7
+2024-02-25 20:09:30,496 INFO yarn.Client: Application report for application_1692104774102_33273 (state: ACCEPTED)
+2024-02-25 20:09:31,499 INFO yarn.Client: Application report for application_1692104774102_33273 (state: ACCEPTED)
+2024-02-25 20:09:32,501 INFO yarn.Client: Application report for application_1692104774102_33273 (state: ACCEPTED)
+2024-02-25 20:09:33,503 INFO yarn.Client: Application report for application_1692104774102_33273 (state: ACCEPTED)
+2024-02-25 20:09:34,505 INFO yarn.Client: Application report for application_1692104774102_33273 (state: ACCEPTED)
+2024-02-25 20:09:35,507 INFO yarn.Client: Application report for application_1692104774102_33273 (state: ACCEPTED)
+2024-02-25 20:09:36,512 INFO yarn.Client: Application report for application_1692104774102_33273 (state: RUNNING)
+2024-02-25 20:09:36,512 INFO yarn.Client: 
+	 client token: N/A
+	 diagnostics: N/A
+	 ApplicationMaster host: rc1a-dataproc-d-1njdvt74bdkw9who.mdb.yandexcloud.net
+	 ApplicationMaster RPC port: 38963
+	 queue: root.tolique7
+	 start time: 1708891768465
+	 final status: UNDEFINED
+	 tracking URL: http://rc1a-dataproc-m-dg5lgqqm7jju58f9.mdb.yandexcloud.net:8088/proxy/application_1692104774102_33273/
+	 user: tolique7
+2024-02-25 20:09:37,515 INFO yarn.Client: Application report for application_1692104774102_33273 (state: RUNNING)
+2024-02-25 20:09:38,517 INFO yarn.Client: Application report for application_1692104774102_33273 (state: RUNNING)
+2024-02-25 20:09:39,519 INFO yarn.Client: Application report for application_1692104774102_33273 (state: RUNNING)
+2024-02-25 20:09:40,522 INFO yarn.Client: Application report for application_1692104774102_33273 (state: RUNNING)
+2024-02-25 20:09:41,524 INFO yarn.Client: Application report for application_1692104774102_33273 (state: RUNNING)
+2024-02-25 20:09:42,526 INFO yarn.Client: Application report for application_1692104774102_33273 (state: RUNNING)
+2024-02-25 20:09:43,529 INFO yarn.Client: Application report for application_1692104774102_33273 (state: RUNNING)
+2024-02-25 20:09:44,531 INFO yarn.Client: Application report for application_1692104774102_33273 (state: RUNNING)
+2024-02-25 20:09:45,533 INFO yarn.Client: Application report for application_1692104774102_33273 (state: RUNNING)
+2024-02-25 20:09:46,535 INFO yarn.Client: Application report for application_1692104774102_33273 (state: RUNNING)
+2024-02-25 20:09:47,537 INFO yarn.Client: Application report for application_1692104774102_33273 (state: RUNNING)
+2024-02-25 20:09:48,539 INFO yarn.Client: Application report for application_1692104774102_33273 (state: RUNNING)
+2024-02-25 20:09:49,541 INFO yarn.Client: Application report for application_1692104774102_33273 (state: RUNNING)
+2024-02-25 20:09:50,543 INFO yarn.Client: Application report for application_1692104774102_33273 (state: RUNNING)
+2024-02-25 20:09:51,546 INFO yarn.Client: Application report for application_1692104774102_33273 (state: RUNNING)
+2024-02-25 20:09:52,547 INFO yarn.Client: Application report for application_1692104774102_33273 (state: RUNNING)
+2024-02-25 20:09:53,550 INFO yarn.Client: Application report for application_1692104774102_33273 (state: ACCEPTED)
+2024-02-25 20:09:53,550 INFO yarn.Client: 
+	 client token: N/A
+	 diagnostics: AM container is launched, waiting for AM container to Register with RM
+	 ApplicationMaster host: N/A
+	 ApplicationMaster RPC port: -1
+	 queue: root.tolique7
+	 start time: 1708891768465
+	 final status: UNDEFINED
+	 tracking URL: http://rc1a-dataproc-m-dg5lgqqm7jju58f9.mdb.yandexcloud.net:8088/proxy/application_1692104774102_33273/
+	 user: tolique7
+2024-02-25 20:09:54,552 INFO yarn.Client: Application report for application_1692104774102_33273 (state: ACCEPTED)
+2024-02-25 20:09:55,554 INFO yarn.Client: Application report for application_1692104774102_33273 (state: ACCEPTED)
+2024-02-25 20:09:56,556 INFO yarn.Client: Application report for application_1692104774102_33273 (state: ACCEPTED)
+2024-02-25 20:09:57,558 INFO yarn.Client: Application report for application_1692104774102_33273 (state: ACCEPTED)
+2024-02-25 20:09:58,560 INFO yarn.Client: Application report for application_1692104774102_33273 (state: ACCEPTED)
+2024-02-25 20:09:59,562 INFO yarn.Client: Application report for application_1692104774102_33273 (state: ACCEPTED)
+2024-02-25 20:10:00,565 INFO yarn.Client: Application report for application_1692104774102_33273 (state: ACCEPTED)
+2024-02-25 20:10:01,567 INFO yarn.Client: Application report for application_1692104774102_33273 (state: ACCEPTED)
+2024-02-25 20:10:02,569 INFO yarn.Client: Application report for application_1692104774102_33273 (state: RUNNING)
+2024-02-25 20:10:02,569 INFO yarn.Client: 
+	 client token: N/A
+	 diagnostics: N/A
+	 ApplicationMaster host: rc1a-dataproc-d-jysa8rey4rqmgffj.mdb.yandexcloud.net
+	 ApplicationMaster RPC port: 39005
+	 queue: root.tolique7
+	 start time: 1708891768465
+	 final status: UNDEFINED
+	 tracking URL: http://rc1a-dataproc-m-dg5lgqqm7jju58f9.mdb.yandexcloud.net:8088/proxy/application_1692104774102_33273/
+	 user: tolique7
+2024-02-25 20:10:03,571 INFO yarn.Client: Application report for application_1692104774102_33273 (state: RUNNING)
+2024-02-25 20:10:04,573 INFO yarn.Client: Application report for application_1692104774102_33273 (state: RUNNING)
+2024-02-25 20:10:05,575 INFO yarn.Client: Application report for application_1692104774102_33273 (state: RUNNING)
+2024-02-25 20:10:06,577 INFO yarn.Client: Application report for application_1692104774102_33273 (state: RUNNING)
+2024-02-25 20:10:07,579 INFO yarn.Client: Application report for application_1692104774102_33273 (state: RUNNING)
+2024-02-25 20:10:08,581 INFO yarn.Client: Application report for application_1692104774102_33273 (state: RUNNING)
+2024-02-25 20:10:09,584 INFO yarn.Client: Application report for application_1692104774102_33273 (state: RUNNING)
+2024-02-25 20:10:10,586 INFO yarn.Client: Application report for application_1692104774102_33273 (state: RUNNING)
+2024-02-25 20:10:11,588 INFO yarn.Client: Application report for application_1692104774102_33273 (state: RUNNING)
+2024-02-25 20:10:12,590 INFO yarn.Client: Application report for application_1692104774102_33273 (state: RUNNING)
+2024-02-25 20:10:13,592 INFO yarn.Client: Application report for application_1692104774102_33273 (state: RUNNING)
+2024-02-25 20:10:14,594 INFO yarn.Client: Application report for application_1692104774102_33273 (state: RUNNING)
+2024-02-25 20:10:15,596 INFO yarn.Client: Application report for application_1692104774102_33273 (state: RUNNING)
+2024-02-25 20:10:16,598 INFO yarn.Client: Application report for application_1692104774102_33273 (state: RUNNING)
+2024-02-25 20:10:17,600 INFO yarn.Client: Application report for application_1692104774102_33273 (state: RUNNING)
+2024-02-25 20:10:18,601 INFO yarn.Client: Application report for application_1692104774102_33273 (state: RUNNING)
+2024-02-25 20:10:19,603 INFO yarn.Client: Application report for application_1692104774102_33273 (state: RUNNING)
+2024-02-25 20:10:20,605 INFO yarn.Client: Application report for application_1692104774102_33273 (state: FINISHED)
+2024-02-25 20:10:20,605 INFO yarn.Client: 
+	 client token: N/A
+	 diagnostics: User application exited with status 1
+	 ApplicationMaster host: rc1a-dataproc-d-jysa8rey4rqmgffj.mdb.yandexcloud.net
+	 ApplicationMaster RPC port: 39005
+	 queue: root.tolique7
+	 start time: 1708891768465
+	 final status: FAILED
+	 tracking URL: http://rc1a-dataproc-m-dg5lgqqm7jju58f9.mdb.yandexcloud.net:8088/proxy/application_1692104774102_33273/
+	 user: tolique7
+2024-02-25 20:10:20,613 INFO yarn.Client: Deleted staging directory hdfs://rc1a-dataproc-m-dg5lgqqm7jju58f9.mdb.yandexcloud.net/user/tolique7/.sparkStaging/application_1692104774102_33273
+2024-02-25 20:10:20,614 ERROR yarn.Client: Application diagnostics message: User application exited with status 1
+Exception in thread "main" org.apache.spark.SparkException: Application application_1692104774102_33273 finished with failed status
+	at org.apache.spark.deploy.yarn.Client.run(Client.scala:1192)
+	at org.apache.spark.deploy.yarn.YarnClusterApplication.start(Client.scala:1583)
+	at org.apache.spark.deploy.SparkSubmit.org$apache$spark$deploy$SparkSubmit$$runMain(SparkSubmit.scala:928)
+	at org.apache.spark.deploy.SparkSubmit.doRunMain$1(SparkSubmit.scala:180)
+	at org.apache.spark.deploy.SparkSubmit.submit(SparkSubmit.scala:203)
+	at org.apache.spark.deploy.SparkSubmit.doSubmit(SparkSubmit.scala:90)
+	at org.apache.spark.deploy.SparkSubmit$$anon$2.doSubmit(SparkSubmit.scala:1007)
+	at org.apache.spark.deploy.SparkSubmit$.main(SparkSubmit.scala:1016)
+	at org.apache.spark.deploy.SparkSubmit.main(SparkSubmit.scala)
+2024-02-25 20:10:20,617 INFO util.ShutdownHookManager: Shutdown hook called
+2024-02-25 20:10:20,617 INFO util.ShutdownHookManager: Deleting directory /tmp/spark-22bf9729-8066-45fb-8386-1b0101e8d6d7
+2024-02-25 20:10:20,621 INFO util.ShutdownHookManager: Deleting directory /tmp/spark-7c83266f-389c-4115-bfa4-d97d0872cd7c
+​
+​

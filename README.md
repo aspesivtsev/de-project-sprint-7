@@ -17,24 +17,7 @@
 Благодаря такой аналитике в соцсеть можно будет вставить рекламу: приложение сможет учитывать местонахождение пользователя и предлагать тому подходящие услуги компаний-партнёров. 
 
 
-
-
 ## Структура репозитория
-
-Файл с координатами городов Австралии, которые аналитики собрали в одну таблицу — geo.csv
-Изначально файл расположен по адресу <https://code.s3.yandex.net/data-analyst/data_engeneer/geo.csv>
-
-Он был загружен локально, а потом скопирован в HDFS: 
-```
-!hdfs dfs -copyFromLocal /lessons/geo.csv /user/tolique7/geo.csv
-```
-
-Внутри `src` расположены две папки:
-```
-/src/dags
-/src/scripts
-```
-
 
 ## Витрины данных
 ### Витрина пользователей - users_mart.py
@@ -76,3 +59,96 @@
 
 ## Используемые технологии и инструменты
 DataLake, Python, PySpark, HDFS, Airflow, Hadoop, Jupyter Notebook
+
+## Технические заметки
+### Файл с координатами
+Файл с координатами городов Австралии, которые аналитики собрали в одну таблицу — geo.csv
+Изначально файл расположен по адресу <https://code.s3.yandex.net/data-analyst/data_engeneer/geo.csv>
+Но потом Олег предоставил правильный файл с колонкой timezones
+Именно он был загружен в папку /lessons через Jupyter Notebook, а потом скопирован в HDFS: 
+```
+!hdfs dfs -copyFromLocal /lessons/geo.csv /user/tolique7/geo.csv
+```
+Примечание: Можно воспользоваться интерфейсом HDFS Namenode (ссылка дается в телеграм-боте)
+Hadoop > Utilities > Browse the file system
+
+### Структура файлов проекта
+Внутри `src` расположены две папки:
+```
+/src/dags
+/src/scripts
+```
+
+### Параметры подключения в Airflow
+Airflow > Admin > Connections
+Connection Id: spark_yarn
+Connection Type: Spark
+Host: yarn
+
+
+### Шпаргалка и записи для справки
+
+**pyspark.sql.functions.col("name")** - возвращает колонку с указанным именем
+
+**pyspark.sql.functions.udf(func)** - объявление user defined function
+
+**pyspark.sql.functions.date_trunc(format, timestamp)** -  
+
+**pyspark.sql.functions.coalesce(col)** - например cDf.select('*', coalesce(cDf["a"], lit(0.0))).show() показывать 0.0 вместо null
+
+**pyspark.sql.functions.count(col)** - агрегатная функция считает количество по группе
+
+**pyspark.sql.functions.filter()** - фильтрация массива по функции которая возвращает True
+
+**pyspark.sql.functions.collect_list()** - возвращает список объектов
+
+**pyspark.sql.functions.from_utc_timestamp(timestamp, timezone)** - возвращает метку времени в формате UTC в часовом поясе timezone
+
+**pyspark.sql.functions.to_timestamp(col, format)** - функция, которая преобразует строку в метку времени. Принимает два аргумента: строку для преобразования и формат строки. 
+
+**pyspark.sql.DataFrame.withColumn("col_name")** - вернуть датафрейм с добавленной колонкой
+
+**pyspark.sql.DataFrame.withColumnRenamed("old_col_name", "new_col_name")** - вернуть датафрейм с переименнованной колонкой 
+
+**pyspark.sql.DataFrame.alias("")** - создание псевдонима
+
+**pyspark.sql.DataFrame.selectExpr(expr)** - позволяет использовать sql выражения
+
+**pyspark.sql.DataFrame.fillna()** или **na.fill()** - заменяет одни значения на другие
+У нас использовалось fillna(0) что меняет все значения null на 0.
+
+**pyspark.sql.DataFrame.groupBy** - группировка 
+```
+df = spark.createDataFrame([(2, "Alice"), (2, "Bob"), (2, "Bob"), (5, "Bob")], schema=["age", "name"])
+df.groupBy("name").agg({"age": "sum"}).sort("name").show()
+```
++-----+--------+
+| name|sum(age)|
++-----+--------+
+|Alice|       2|
+|  Bob|       9|
++-----+--------+
+
+**pyspark.sql.Column.cast()** — это функция из класса Column, которая используется для преобразования типа столбца в другой тип данных.
+
+
+spark = spark.read.csv(geo_cities_path, sep = ";", header = True) \
+        .withColumn("lat", F.col("lat").cast(DoubleType())) \
+        .withColumnRenamed("lat", "lat_c")
+
+**sprk-submit for testing:**
+```
+/usr/lib/spark/bin/spark-submit --master yarn --deploy-mode cluster /lessons/users_mart.py 2022-05-31 30 /user/tolique7/data/geo/events/ /user/tolique7/geo.csv /user/tolique7/data/analytics/
+```
+
+**Настройки Spark'а, которые корректно отрабатывали на инфраструктуре:**
+spark = SparkSession.builder \
+    .appName("Users Mart") \
+    .master("yarn") \
+    .config("spark.executor.memory", "2g") \
+    .config("spark.executor.cores", "2") \
+    .config("spark.driver.cores", "2") \
+    .config("spark.dynamicAllocation.enabled", "true") \
+    .config("spark.dynamicAllocation.executorIdleTimeout", "60s") \
+    .config("spark.ui.port", "4051") \
+    .getOrCreate()
