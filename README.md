@@ -70,7 +70,7 @@ DataLake, Python, PySpark, HDFS, Airflow, Hadoop, Jupyter Notebook
 !hdfs dfs -copyFromLocal /lessons/geo.csv /user/tolique7/geo.csv
 ```
 Примечание: Можно воспользоваться интерфейсом HDFS Namenode (ссылка дается в телеграм-боте)
-Hadoop > Utilities > Browse the file system
+Hadoop > Utilities > Browse the file system и прям с локального компьютера загрузить необходимый файл в HDFS.
 
 ### Структура файлов проекта
 Внутри `src` расположены две папки:
