@@ -41,29 +41,10 @@ dag_spark = DAG(
 #     executor_memory = "2g"
 # )
     
-geo_locations_mart = SparkSubmitOperator(
-    task_id="geo_locations_mart",
-    dag=dag_spark,
-    application="/lessons/geo_locations_mart.py",
-    conn_id="spark_yarn",
-    application_args=[
-        "2022-05-31",
-        "30",
-        "/user/tolique7/data/geo/events/",
-        "/user/tolique7/geo.csv",
-        "/user/tolique7/data/analytics/",
-    ],
-    conf={
-        "spark.driver.masResultSize": "20g"
-    },
-    executor_cores = 2,
-    executor_memory = "2g"
-)
-    
-# recommendations_mart = SparkSubmitOperator(
-#     task_id="recommendations_mart",
+# geo_locations_mart = SparkSubmitOperator(
+#     task_id="geo_locations_mart",
 #     dag=dag_spark,
-#     application="/lessons/recommendations_mart.py",
+#     application="/lessons/geo_locations_mart.py",
 #     conn_id="spark_yarn",
 #     application_args=[
 #         "2022-05-31",
@@ -78,7 +59,27 @@ geo_locations_mart = SparkSubmitOperator(
 #     executor_cores = 2,
 #     executor_memory = "2g"
 # )
+    
+recommendations_mart = SparkSubmitOperator(
+    task_id="recommendations_mart",
+    dag=dag_spark,
+    application="/lessons/recommendations_mart.py",
+    conn_id="spark_yarn",
+    application_args=[
+        "2022-05-31",
+        "30",
+        "/user/tolique7/data/geo/events/",
+        "/user/tolique7/geo.csv",
+        "/user/tolique7/data/analytics/",
+    ],
+    conf={
+        "spark.driver.masResultSize": "20g"
+    },
+    executor_cores = 2,
+    executor_memory = "2g"
+)
 
 #users_mart >> 
-geo_locations_mart 
-#>> recommendations_mart
+#geo_locations_mart 
+#>> 
+recommendations_mart

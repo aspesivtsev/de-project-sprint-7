@@ -44,7 +44,7 @@ def calculate_the_distance(lat_1, lat_2, lng_1, lng_2):
     return result
 
 # defining a user defined function for calculating the distance 
-udf_calculate_the_distance = F.udf(calculate_the_distance))
+udf_calculate_the_distance = F.udf(calculate_the_distance)
 
 def input_paths(date, depth_days, events_path):
     d_t = datetime.datetime.strptime(date, "%Y-%m-%d")
@@ -248,7 +248,7 @@ def main():
     
     # recomendations according рекоммендации по подпискам пользователей
     recommendations = (
-        users_city.withColumn("processed_dttm", current_date())
+        users_city.withColumn("processed_dttm", F.current_date())
         .withColumn(
             "local_datetime",
             F.from_utc_timestamp(F.col("processed_dttm"), F.col("timezone")),
