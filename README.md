@@ -64,7 +64,7 @@ DataLake, Python, PySpark, HDFS, Airflow, Hadoop, Jupyter Notebook
 ### Файл с координатами
 Файл с координатами городов Австралии, которые аналитики собрали в одну таблицу — geo.csv
 Изначально файл расположен по адресу <https://code.s3.yandex.net/data-analyst/data_engeneer/geo.csv>
-Но потом Олег предоставил правильный файл с колонкой timezones
+Но потом Олег предоставил правильный файл с колонкой timezones.
 Именно он был загружен в папку /lessons через Jupyter Notebook, а потом скопирован в HDFS: 
 ```
 !hdfs dfs -copyFromLocal /lessons/geo.csv /user/tolique7/geo.csv
@@ -122,26 +122,36 @@ Host: yarn
 df = spark.createDataFrame([(2, "Alice"), (2, "Bob"), (2, "Bob"), (5, "Bob")], schema=["age", "name"])
 df.groupBy("name").agg({"age": "sum"}).sort("name").show()
 ```
-+-----+--------+
-| name|sum(age)|
-+-----+--------+
-|Alice|       2|
-|  Bob|       9|
-+-----+--------+
 
 **pyspark.sql.Column.cast()** — это функция из класса Column, которая используется для преобразования типа столбца в другой тип данных.
 
-
+**Чтение csv**
+```
 spark = spark.read.csv(geo_cities_path, sep = ";", header = True) \
         .withColumn("lat", F.col("lat").cast(DoubleType())) \
         .withColumnRenamed("lat", "lat_c")
+```
+**Запись а parquet**
+```
+recommendations.write.mode("overwrite").parquet(f"{output_path}/mart/recommendations/") 
+```
 
 **sprk-submit for testing:**
 ```
 /usr/lib/spark/bin/spark-submit --master yarn --deploy-mode cluster /lessons/users_mart.py 2022-05-31 30 /user/tolique7/data/geo/events/ /user/tolique7/geo.csv /user/tolique7/data/analytics/
 ```
 
+**Параметры вызовов из командной строки**
+```
+date = sys.argv[1] # '2022-05-31'
+depth_days = sys.argv[2] # 35
+events_path = sys.argv[3] # "/user/tolique7/data/geo/events/" 
+geo_cities_path = sys.argv[4] # "/user/tolique7/geo.csv"
+output_path = sys.argv[5] # "/user/tolique7/data/analytics/"
+```
+
 **Настройки Spark'а, которые корректно отрабатывали на инфраструктуре:**
+```
 spark = SparkSession.builder \
     .appName("Users Mart") \
     .master("yarn") \
@@ -152,3 +162,4 @@ spark = SparkSession.builder \
     .config("spark.dynamicAllocation.executorIdleTimeout", "60s") \
     .config("spark.ui.port", "4051") \
     .getOrCreate()
+```
