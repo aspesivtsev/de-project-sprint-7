@@ -80,11 +80,12 @@ Hadoop > Utilities > Browse the file system
 ```
 
 ### Параметры подключения в Airflow
-Airflow > Admin > Connections
+```
+**Airflow > Admin > Connections**
 Connection Id: spark_yarn
 Connection Type: Spark
 Host: yarn
-
+```
 
 ### Шпаргалка и записи для справки
 
