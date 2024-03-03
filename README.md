@@ -109,11 +109,15 @@ Host: yarn
 
 **pyspark.sql.functions.current_date()** - возвращает текущую дату
 
+**pyspark.sql.functions.hash(cols)** - рассчет хэша
+
 **pyspark.sql.DataFrame.withColumn("col_name")** - вернуть датафрейм с добавленной колонкой
 
 **pyspark.sql.DataFrame.withColumnRenamed("old_col_name", "new_col_name")** - вернуть датафрейм с переименнованной колонкой 
 
 **pyspark.sql.DataFrame.alias("")** - создание псевдонима
+
+**pyspark.sql.DataFrame.drop(cols)** - вернуть новый датафрейм без указанной колонки
 
 **pyspark.sql.DataFrame.selectExpr(expr)** - позволяет использовать sql выражения
 
@@ -134,6 +138,9 @@ spark = spark.read.csv(geo_cities_path, sep = ";", header = True) \
         .withColumn("lat", F.col("lat").cast(DoubleType())) \
         .withColumnRenamed("lat", "lat_c")
 ```
+
+
+
 **Запись а parquet**
 ```
 recommendations.write.mode("overwrite").parquet(f"{output_path}/mart/recommendations/") 
