@@ -107,6 +107,8 @@ Host: yarn
 
 **pyspark.sql.functions.to_timestamp(col, format)** - функция, которая преобразует строку в метку времени. Принимает два аргумента: строку для преобразования и формат строки. 
 
+**pyspark.sql.functions.current_date()** - возвращает текущую дату
+
 **pyspark.sql.DataFrame.withColumn("col_name")** - вернуть датафрейм с добавленной колонкой
 
 **pyspark.sql.DataFrame.withColumnRenamed("old_col_name", "new_col_name")** - вернуть датафрейм с переименнованной колонкой 

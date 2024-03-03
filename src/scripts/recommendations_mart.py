@@ -220,7 +220,6 @@ def main():
         .withColumnRenamed("lat_left", "lat")
         .withColumnRenamed("lon_left", "lon")
         .drop("lat_from", "lon_from", "distance")
-        #.select("user_right", "user_left", "lat", "lon", "time", "lat_right", "lon_right", "time")
     )
     
     # find a city
@@ -264,5 +263,4 @@ def main():
 
 
 if __name__ == "__main__":
-
     main()
