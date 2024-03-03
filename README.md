@@ -111,6 +111,12 @@ Host: yarn
 
 **pyspark.sql.functions.hash(cols)** - рассчет хэша
 
+**pyspark.sql.functions.unix_timestamp(timestamp, format)** - перевести строку в нужном формате в unix-время
+
+**pyspark.sql.functions.concat(cols)** - слить несколько колонок в одну (без разделителей)
+
+**pyspark.sql.functions.array_join()** - слить несколько колонок в одну с разделителем
+
 **pyspark.sql.DataFrame.withColumn("col_name")** - вернуть датафрейм с добавленной колонкой
 
 **pyspark.sql.DataFrame.withColumnRenamed("old_col_name", "new_col_name")** - вернуть датафрейм с переименнованной колонкой 
