@@ -36,16 +36,16 @@ output_path = sys.argv[5] # "/user/tolique7/data/analytics/"
 
 # function for calculation the distance between two geographical points
 def calculate_the_distance(lat_1, lat_2, lng_1, lng_2):
-    lat_1 = (math.pi / 180) * lat_1
-    lat_2 = (math.pi / 180) * lat_2
-    lng_1 = (math.pi / 180) * lng_1
-    lng_2 = (math.pi / 180) * lng_2
+    lat_1 = math.radians(lat_1) #(math.pi / 180) * lat_1
+    lat_2 = math.radians(lat_2) #(math.pi / 180) * lat_2
+    lng_1 = math.radians(lng_1) #(math.pi / 180) * lng_1
+    lng_2 = math.radians(lng_2) #(math.pi / 180) * lng_2
     result = 2 * 6371 * math.asin(math.sqrt(math.pow(math.sin((lat_2 - lat_1) / 2), 2) + math.cos(lat_1) * math.cos(lat_2) * math.pow(math.sin((lng_2 - lng_1) / 2),2))) 
     return result  
 
 
 # defining a user defined function for calculating the distance 
-udf_calculate_the_distance = F.udf(calculate_the_distance))
+udf_calculate_the_distance = F.udf(calculate_the_distance)
 
 # list of paths
 def input_paths(date, depth_days, events_path):

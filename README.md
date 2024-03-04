@@ -138,14 +138,15 @@ df.groupBy("name").agg({"age": "sum"}).sort("name").show()
 
 **pyspark.sql.Column.cast()** — это функция из класса Column, которая используется для преобразования типа столбца в другой тип данных.
 
+**перевод в радианы**
+math.radians(lat_1) эквивалент (math.pi / 180) * lat_1
+
 **Чтение csv**
 ```
 spark = spark.read.csv(geo_cities_path, sep = ";", header = True) \
         .withColumn("lat", F.col("lat").cast(DoubleType())) \
         .withColumnRenamed("lat", "lat_c")
 ```
-
-
 
 **Запись а parquet**
 ```
@@ -179,3 +180,4 @@ spark = SparkSession.builder \
     .config("spark.ui.port", "4051") \
     .getOrCreate()
 ```
+
